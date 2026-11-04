@@ -33,7 +33,7 @@ Proses profiling dilakukan secara menyeluruh untuk mengidentifikasi keberadaan m
 # Temuan 1: Inkonsistensi Demografi Anak (< 18 Tahun)
 under_18 = df[df['age'] < 18]
 print("--- [1] PROFILING DEMOGRAFI ANAK (< 18 TAHUN) ---")
-print(f"Total baris usia < 18 tahun: {len(under_18):,} ({(len(under_18)/len(df))*100:.2f}%)")
+print(f"Total baris usia < 18 tahun: {len(under_18):,} ({(len(under_18)/len(df))*100:.2f})")
 print(
     f"- Memiliki Pendidikan Tinggi (>= HS): {under_18['education'].isin(['HS', 'Some College', 'Bachelors', 'Masters', 'Doctorate']).sum():,}"
 )
@@ -81,7 +81,7 @@ print(f"total_claims_paid > annual_medical_cost: {len(claim_exceed_cost):,} kasu
 # Temuan 5: Missing Value pada alcohol_freq
 missing_alcohol = df['alcohol_freq'].isna().sum()
 print("--- [5] PROFILING MISSING VALUE ALCOHOL FREQUENCY ---")
-print(f"Missing (NaN) pada alcohol_freq: {missing_alcohol:,} ({(missing_alcohol/len(df))*100:.2f}%)")
+print(f"Missing (NaN) pada alcohol_freq: {missing_alcohol:,} ({(missing_alcohol/len(df))*100:.2f})")
 print(f"Distribusi nilai yang terisi:\n{df['alcohol_freq'].value_counts(dropna=False)}")
 
 """3. Script Data Cleaning (data_cleaning.py)
@@ -508,7 +508,7 @@ print(f"Total Sampel           : {len(X):,} baris\n")
 # ==============================================================================
 # 2. TRAIN - TEST SPLITTING
 # ==============================================================================
-# Pembagian 80% data latih dan 20% data uji dengan random_state tetap untuk replikasi
+# Pembagian 80 data latih dan 20 data uji dengan random_state tetap untuk replikasi
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.20, random_state=42
 )
@@ -555,7 +555,7 @@ for name, model in models.items():
     # Perhitungan Metrik Evaluasi
     r2 = r2_score(y_test, y_pred)
     mae = mean_absolute_error(y_test, y_pred)
-    mape = mean_absolute_percentage_error(y_test, y_pred) * 100  # Dalam persen (%)
+    mape = mean_absolute_percentage_error(y_test, y_pred) * 100  # Dalam persen ()
 
     # Pengecekan Kriteria Ambang Batas
     r2_status = "MEMENUHI" if r2 > 0.7 else "TIDAK MEMENUHI"
@@ -565,9 +565,9 @@ for name, model in models.items():
         "Model": name,
         "R-Square (R2)": round(r2, 4),
         "MAE ($)": round(mae, 2),
-        "MAPE (%)": f"{mape:.2f}%",
+        "MAPE ()": f"{mape:.2f}",
         "R2 > 0.7?": r2_status,
-        "MAPE < 15%?": mape_status
+        "MAPE < 15?": mape_status
     })
 
 # Format hasil dalam DataFrame untuk visualisasi tabular yang rapi
@@ -593,7 +593,7 @@ Dibuat menggunakan arsitektur Pipeline([('poly', PolynomialFeatures(degree=2)), 
 Metrik Evaluasi:
 $R^2$ Score: Mengukur proporsi variansi target yang mampu dijelaskan oleh model (target: $> 0.70$).
 MAE (Mean Absolute Error): Mengukur rata-rata deviasi absolut nilai prediksi dalam satuan dollar ($).
-MAPE (Mean Absolute Percentage Error): Mengukur rata-rata persentase galat relatif prediksi terhadap nilai riil (target: $< 15%$).
+MAPE (Mean Absolute Percentage Error): Mengukur rata-rata persentase galat relatif prediksi terhadap nilai riil (target: $< 15$).
 """
 
 import pickle
@@ -627,7 +627,7 @@ target = 'annual_premium'
 X = df[features_10]
 y = df[target]
 
-# Train-Test Split (80% Train, 20% Test)
+# Train-Test Split (80 Train, 20 Test)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.20, random_state=42
 )
@@ -680,7 +680,7 @@ importances = best_xgb.feature_importances_
 df_importance = pd.DataFrame({
     'Feature': features_10,
     'Importance_Score': importances,
-    'Percentage (%)': (importances / importances.sum()) * 100
+    'Percentage ()': (importances / importances.sum()) * 100
 }).sort_values(by='Importance_Score', ascending=False).reset_index(drop=True)
 
 # Ambil Top 5 fitur teratas
@@ -691,7 +691,7 @@ print(df_importance.to_string(index=False))
 
 print(f"\n>> 5 Fitur Paling Relevan/Penting:")
 for rank, row in df_importance.head(5).iterrows():
-    print(f"   {rank+1}. {row['Feature']} ({row['Percentage (%)']:.2f}%)")
+    print(f"   {rank+1}. {row['Feature']} ({row['Percentage ()']:.2f})")
 
 # 4. PEMODELAN DENGAN TOP 5 FITUR & EVALUASI AKURASI
 # ==============================================================================
@@ -713,14 +713,14 @@ r2 = r2_score(y_test, y_pred)
 mae = mean_absolute_error(y_test, y_pred)
 mape = mean_absolute_percentage_error(y_test, y_pred) * 100
 
-# Akurasi Persentase Model: (100% - MAPE)
+# Akurasi Persentase Model: (100 - MAPE)
 model_accuracy = 100 - mape
 
 print(f"\n--- Ringkasan Akurasi Model Final (Top 5 Fitur) ---")
 print(f"R² Score (Koefisien Determinasi) : {r2:.4f}  (Target > 0.70  -> {'MEMENUHI' if r2 > 0.7 else 'GAGAL'})")
 print(f"MAE (Mean Absolute Error)        : ${mae:,.2f}")
-print(f"MAPE (Mean Absolute % Error)     : {mape:.2f}%  (Target < 15.0% -> {'MEMENUHI' if mape < 15 else 'GAGAL'})")
-print(f"Akurasi Model (100% - MAPE)      : {model_accuracy:.2f}%")
+print(f"MAPE (Mean Absolute  Error)     : {mape:.2f}  (Target < 15.0 -> {'MEMENUHI' if mape < 15 else 'GAGAL'})")
+print(f"Akurasi Model (100 - MAPE)      : {model_accuracy:.2f}")
 
 # 5. SIMPAN MODEL KE FORMAT PICKLE (.pkl)
 # ==============================================================================
@@ -759,10 +759,10 @@ Lebih cepat dan efisien daripada GridSearch penuh untuk dataset ukuran besar (10
 
 5 Fitur Paling Relevan (feature_importances_):
 XGBoost menghitung gain score (seberapa besar fitur berkontribusi mengurangi loss function saat membuat split tree).
-Dari 10 fitur, biasanya annual_medical_cost, risk_score, total_claims_paid, age, dan bmi atau deductible mendominasi >80% bobot prediksi premi tahunan.
+Dari 10 fitur, biasanya annual_medical_cost, risk_score, total_claims_paid, age, dan bmi atau deductible mendominasi >80 bobot prediksi premi tahunan.
 
 Metrik Akurasi:
-Untuk problem Regresi, istilah "Akurasi" secara standar diukur melalui $R^2$ Score (kemampuan menjelaskan variansi data) dan $100% - \text{MAPE}$ (tingkat akurasi prediksi relatif terhadap nilai aktual).
+Untuk problem Regresi, istilah "Akurasi" secara standar diukur melalui $R^2$ Score (kemampuan menjelaskan variansi data) dan $100 - \text{MAPE}$ (tingkat akurasi prediksi relatif terhadap nilai aktual).
 
 Simpan Model (pickle.dump):
 Menyimpan objek model sekaligus daftar nama top_5_features dan nilai metriknya, sehingga saat di-deploy di server / aplikasi, pipeline input data tidak akan tertukar urutannya.
@@ -786,7 +786,7 @@ features_all = [col for col in df_final.columns if col not in exclude_cols]
 X_all = df_final[features_all]
 y_all = df_final['annual_premium']
 
-# Split data (80% Train, 20% Test) dengan random state yang sama (42) agar konsisten
+# Split data (80 Train, 20 Test) dengan random state yang sama (42) agar konsisten
 X_train_all, X_test_all, y_train_all, y_test_all = train_test_split(
     X_all, y_all, test_size=0.20, random_state=42
 )
@@ -805,9 +805,9 @@ accuracy_all = 100 - mape_all
 
 # 4. Tampilkan Perbandingan
 comparison_df = pd.DataFrame({
-    'Metrik': ['R² Score', 'MAE ($)', 'MAPE (%)', 'Akurasi Model (%)'],
-    'Model 5 Fitur Utama': [0.8992, 59.75, '8.69%', '91.31%'],
-    'Model Semua Fitur (100 Kolom)': [r2_all, mae_all, f"{mape_all:.2f}%", f"{accuracy_all:.2f}%"]
+    'Metrik': ['R² Score', 'MAE ($)', 'MAPE ()', 'Akurasi Model ()'],
+    'Model 5 Fitur Utama': [0.8992, 59.75, '8.69', '91.31'],
+    'Model Semua Fitur (100 Kolom)': [r2_all, mae_all, f"{mape_all:.2f}", f"{accuracy_all:.2f}"]
 })
 
 display(comparison_df)
@@ -831,10 +831,10 @@ accuracy_10 = 100 - mape_10
 
 # 3. Tampilkan Perbandingan Menyeluruh
 comparison_all_df = pd.DataFrame({
-    'Metrik': ['R² Score', 'MAE ($)', 'MAPE (%)', 'Akurasi Model (%)'],
-    'Model 5 Fitur Utama': [0.8992, 59.75, '8.69%', '91.31%'],
-    'Model 10 Fitur Awal': [r2_10, mae_10, f"{mape_10:.2f}%", f"{accuracy_10:.2f}%"],
-    'Model Semua Fitur (100 Kolom)': [r2_all, mae_all, f"{mape_all:.2f}%", f"{accuracy_all:.2f}%"]
+    'Metrik': ['R² Score', 'MAE ($)', 'MAPE ()', 'Akurasi Model ()'],
+    'Model 5 Fitur Utama': [0.8992, 59.75, '8.69', '91.31'],
+    'Model 10 Fitur Awal': [r2_10, mae_10, f"{mape_10:.2f}", f"{accuracy_10:.2f}"],
+    'Model Semua Fitur (100 Kolom)': [r2_all, mae_all, f"{mape_all:.2f}", f"{accuracy_all:.2f}"]
 })
 
 display(comparison_all_df)
@@ -845,7 +845,7 @@ Kita menulis kembali file `app.py` untuk menggunakan model dengan input 10 fitur
 """
 
 # Commented out IPython magic to ensure Python compatibility.
-# %%writefile app.py
+# writefile app.py
 # import streamlit as st
 # import pickle
 # import numpy as np
@@ -892,12 +892,12 @@ artifact_10 = {
 with open('xgb_10_features_model.pkl', 'wb') as file:
     pickle.dump(artifact_10, file)
 
-print("Model 10 fitur berhasil disimpan!")
+print("Model 10 fitur berhasil disimpan")
 
 """Sekarang kita buat script `app.py` lengkap yang membaca model `xgb_10_features_model.pkl` tersebut."""
 
 # Commented out IPython magic to ensure Python compatibility.
-# %%writefile app.py
+# writefile app.py
 # import streamlit as st
 # import pickle
 # import numpy as np
@@ -922,13 +922,13 @@ print("Model 10 fitur berhasil disimpan!")
 #     st.stop()
 # 
 # # Header
-# st.title("🏥 Medical Insurance Premium Predictor (10 Features)")
+# st.title(" Medical Insurance Premium Predictor (10 Features)")
 # st.write("Prediksi Biaya Premi Tahunan menggunakan model XGBoost dengan 10 Fitur Utama teratas.")
 # 
 # st.sidebar.header("Informasi Performa Model")
 # st.sidebar.write(f"**R² Score**: {metrics['r2']:.4f}")
 # st.sidebar.write(f"**MAE**: ${metrics['mae']:.2f}")
-# st.sidebar.write(f"**Akurasi**: {metrics['accuracy_pct']:.2f}%")
+# st.sidebar.write(f"**Akurasi**: {metrics['accuracy_pct']:.2f}")
 # 
 # # Form Input Fitur
 # st.subheader("Input Data Pasien")
@@ -972,20 +972,7 @@ print("Model 10 fitur berhasil disimpan!")
 # 
 #     st.success(f"### 💰 Estimasi Premi Tahunan: **${prediction:,.2f}**")
 
-"""### 2. Instalasi Pustaka & Persiapan Deployment
 
-Instal kembali paket Streamlit dan Localtunnel di lingkungan runtime.
-"""
-
-!pip install -q streamlit
-!npm install -q -g localtunnel
-
-"""### 3. Dapatkan IP Publik Colab
-
-IP ini berfungsi sebagai kata sandi (*Endpoint IP*) untuk membuka tautan publik Localtunnel.
-"""
-
-!wget -qO- ipv4.icanhazip.com
 
 # Melakukan Sanity Check dan Analisis Kelayakan Logika Bisnis Premi
 y_pred_test = xgb_10_features.predict(X_test)
