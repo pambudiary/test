@@ -1018,3 +1018,30 @@ Berdasarkan pengujian kelayakan (*sanity check*) menggunakan model **XGBoost (10
 *   **Insight**: Model secara otomatis memahami hukum alam penuaan biologis manusia, di mana bertambahnya usia linear dengan peningkatan risiko kesehatan. Penyesuaian tarif otomatis ini menjaga stabilitas dana jaminan asuransi perusahaan tetap sehat dalam jangka panjang.
 ```
 """
+# ────────────────────────────────────────────────────────
+# BAGIAN TAMPILAN PREDIKSI BIAYA ASURANSI
+# ────────────────────────────────────────────────────────
+st.write("---")
+st.header("🔮 Aplikasi Prediksi Premi/Biaya Medis")
+st.write("Masukkan data di bawah ini untuk memprediksi perkiraan biaya:")
+
+# 1. Membuat Input Form di Dashboard
+col1, col2 = st.columns(2)
+
+with col1:
+    input_age = st.slider("Usia Anda", min_value=18, max_value=100, value=30)
+    input_smoker = st.selectbox("Status Perokok", options=["No", "Yes"])
+    input_bmi = st.number_input("Nilai BMI (Body Mass Index)", min_value=10.0, max_value=50.0, value=25.0)
+
+with col2:
+    input_region = st.selectbox("Wilayah Tinggal", options=["northwest", "northeast", "southwest", "southeast"])
+    input_children = st.number_input("Jumlah Anak/Tanggungan", min_value=0, max_value=10, value=0)
+
+# 2. Tombol Aksi untuk Menghitung Prediksi
+if st.button("Hitung Estimasi Biaya"):
+    # CATATAN: Di sini Anda perlu memasukkan logika pemrosesan input (encoding/scaling) 
+    # dan memanggil model machine learning Anda (misalnya: model.predict())
+    
+    # Contoh visualisasi output sementara:
+    estimasi_biaya = 15000000  # Ganti dengan hasil perhitungan asli dari model Anda
+    st.success(f"### Perkiraan Biaya Medis/Premi Anda: Rp {estimasi_biaya:,.2f}")
