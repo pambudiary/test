@@ -1,0 +1,6 @@
+%%writefile requirements.txt
+streamlit
+xgboost
+pandash
+numpy
+scikit-learn
